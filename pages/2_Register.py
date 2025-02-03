@@ -125,7 +125,7 @@ def register_page():
             user_id = auth_response.user.id
             create_user_profile(user_id, username, email, facility, user_category)
             
-            st.success("Registration successful! Please check your email to verify your account.")
+            st.success("Registration successful! Your registration will be reviewed and if approved you can login. Review takes a maximum of 24hrs")
             
             # Add login button
             if st.button("Go to Login"):

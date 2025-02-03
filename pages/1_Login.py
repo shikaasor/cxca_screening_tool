@@ -22,11 +22,15 @@ def init_session_state():
         st.session_state.facility = None
     if "login_time" not in st.session_state:
         st.session_state.login_time = None
+    if "approved" not in st.session_state:
+        st.session_state.approved = None
+    if "user_category" not in st.session_state:
+        st.session_state.user_category = None
 
 def get_user_metadata(user_id):
     """Fetch user metadata from Supabase"""
     try:
-        response = supabase.table('profiles').select('username','email','facility').eq('id', user_id).single().execute()
+        response = supabase.table('profiles').select('username','email','facility','approved','user_category').eq('id', user_id).single().execute()
         return response.data if response.data else None
     except Exception as e:
         st.error(f"Error fetching user metadata: {str(e)}")
@@ -65,16 +69,22 @@ def login_page():
                 if user:
                     # Fetch user metadata (like facility)
                     user_metadata = get_user_metadata(user.id)
+
+                    if not user_metadata.get("approved"):
+                        st.error("Your account is pending approval by an admin which usually takes 24hours at the most.")                     
+                        return
                     
                     # Update session state
                     st.session_state.logged_in = True
                     st.session_state.user_id = user.id
                     st.session_state.username = user_metadata.get('username') if user_metadata else None
                     st.session_state.facility = user_metadata.get('facility') if user_metadata else None
+                    st.session_state.approved = user_metadata.get('approved') if user_metadata else None
+                    st.session_state.user_category = user_metadata.get('user_category') if user_metadata else None
                     st.session_state.login_time = datetime.now()
                     
                     st.success("Login successful!")
-                    st.rerun()
+                    st.switch_page("home.py")
                 else:
                     st.error("Invalid email or password")
                     
@@ -90,6 +100,8 @@ def logout():
         st.session_state.logged_in = False
         st.session_state.user_id = None
         st.session_state.facility = None
+        st.session_state.approved = None
+        st.session_state.user_category = None
         st.session_state.login_time = None
         st.success("Logged out successfully!")
     except Exception as e:

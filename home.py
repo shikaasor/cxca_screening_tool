@@ -24,6 +24,10 @@ def init_session_state():
         st.session_state.user_email = None
     if "username" not in st.session_state:
         st.session_state.username = None
+    if "user_category" not in st.session_state:
+        st.session_state.user_category = None
+    if "approved" not in st.session_state:
+        st.session_state.approved = None
 
 def check_active_session():
     """Check if there's an active Supabase session"""
@@ -38,7 +42,7 @@ def check_active_session():
 def get_user_metadata(user_id):
     """Fetch user metadata from Supabase"""
     try:
-        response = supabase.table('profiles').select('username','email','facility').eq('id', user_id).single().execute()
+        response = supabase.table('profiles').select('username','email','facility','user_category','approved').eq('id', user_id).single().execute()
         print(response.data)
         return response.data if response.data else None
     except Exception as e:
@@ -55,6 +59,7 @@ def logout():
         st.session_state.login_time = None
         st.session_state.user_email = None
         st.session_state.username = None
+        st.session_state.approved = None
         st.success("Logged out successfully!")
         st.rerun()
     except Exception as e:
@@ -82,6 +87,8 @@ def main():
             st.session_state.user_email = user_metadata.get('email') if user_metadata else None
             st.session_state.username = user_metadata.get('username') if user_metadata else None
             st.session_state.facility = user_metadata.get('facility') if user_metadata else None
+            st.session_state.user_category = user_metadata.get('user_category') if user_metadata else None 
+            st.session_state.approved = user_metadata.get('approved') if user_metadata else None 
             st.session_state.login_time = datetime.now()
     
     st.title("Welcome to the Cervical Cancer Screening Portal")
@@ -95,6 +102,7 @@ def main():
             st.write(f"You are logged in as: **{st.session_state.username}**")
             st.write(f"Facility: **{st.session_state.facility}**")
             
+
             # Add a divider
             st.divider()
             
@@ -108,9 +116,9 @@ def main():
                     st.switch_page("pages/3_Screening.py")
             
             with col2:
-                if st.button("View Records", use_container_width=True):
-                    # Add navigation to records page
-                    st.switch_page("pages/records.py")
+                if st.session_state.user_category == "reviewer" and st.session_state.approved:
+                    if st.button("View Records", use_container_width=True):
+                        st.switch_page("pages/4_records.py")
             
             # Logout button at the bottom
             st.divider()

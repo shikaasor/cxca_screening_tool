@@ -10,6 +10,8 @@ def init_session_state():
         st.session_state.facility = None
     if 'login_time' not in st.session_state:
         st.session_state.login_time = None
+    if 'approved' not in st.session_state:
+        st.session_state.approved = None
 
 def check_auth():
     if not st.session_state.logged_in:
