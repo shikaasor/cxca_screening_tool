@@ -21,12 +21,15 @@ def init_supabase():
     supabase_key = os.getenv('SUPABASE_KEY')
     return create_client(supabase_url, supabase_key)
 
-def get_facilities():
-    load_dotenv()
-    facilities_str = st.secrets.get('FACILITIES', os.getenv('FACILITIES'))
-    if not facilities_str:
-        return []
-    return [facility.strip() for facility in facilities_str.split(',')]
+def get_user_metadata(user_id):
+    supabase = init_supabase()
+    """Fetch user metadata from Supabase"""
+    try:
+        response = supabase.table('profiles').select('username','email','facility').eq('id', user_id).single().execute()
+        return response.data if response.data else None
+    except Exception as e:
+        st.error(f"Error fetching user metadata: {str(e)}")
+        return None
 
 def save_image_to_supabase(supabase: Client, file, client_code):
     """Save the PIL image to Supabase storage and return the URL"""
@@ -218,7 +221,7 @@ def screening_page():
                     st.session_state.image_data, 
                     st.session_state.diagnosis_data['class_name'],
                     st.session_state.diagnosis_data['conf_score'],
-                    st.session_state.selected_facility,
+                    st.session_state.facility,
                     client_code
                 ):
                     st.success("Successfully sent to clinician for review!")
