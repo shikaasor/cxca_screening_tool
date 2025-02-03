@@ -33,6 +33,7 @@ def get_user_metadata(user_id):
         return None
 
 def login_page():
+    st.set_page_config(initial_sidebar_state="collapsed")
     st.title("Login")
     
     set_background('./bgs/654.jpg')

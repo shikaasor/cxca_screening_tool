@@ -64,7 +64,8 @@ def main():
     st.set_page_config(
         page_title="Cervical Cancer Screening Portal",
         page_icon="🏥",
-        layout="wide"
+        layout="wide",
+        initial_sidebar_state="collapsed"
     )
     
     set_background('./bgs/654.jpg')

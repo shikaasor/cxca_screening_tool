@@ -119,6 +119,7 @@ def send_to_clinician(image, class_name, conf_score, selected_facility, client_c
     return success
 
 def screening_page():
+    st.set_page_config(initial_sidebar_state="collapsed")
     set_background('./bgs/654.jpg')
     check_auth()
     

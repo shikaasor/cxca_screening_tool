@@ -37,6 +37,7 @@ def create_user_profile(user_id, username, email, facility, user_category):
         raise Exception(f"Failed to create user profile: {str(e)}")
 
 def register_page():
+    st.set_page_config(initial_sidebar_state="collapsed")
     st.title("Register")
 
     set_background('./bgs/654.jpg')
