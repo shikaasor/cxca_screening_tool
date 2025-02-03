@@ -126,9 +126,12 @@ def screening_page():
     set_background('./bgs/654.jpg')
     check_auth()
     
-    st.title("Cervical Cancer Screening Tool")
+    st.markdown("<h1 style='text-align: center; color: #A5FFFD; border: 2px solid #30B0C2; border-radius: 10px; padding: 10px;'>Cervical Cancer Screening Tool</h1>", unsafe_allow_html=True)
+
     st.write(f"User: {st.session_state.username}")
     st.write(f"Facility: {st.session_state.facility}")
+
+    st.markdown("<h2 style='text-align: center;'>Please upload an image for analysis</h2>", unsafe_allow_html=True)
 
     # Initialize Supabase client
     supabase = init_supabase()
@@ -136,9 +139,6 @@ def screening_page():
     #device handling
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    # page setup
-    st.markdown("<h1 style='text-align: center; color: #A5FFFD; border: 2px solid #30B0C2; border-radius: 10px; padding: 10px;'>Cervical Cancer Screening Tool</h1>", unsafe_allow_html=True)
-    st.markdown("<h2 style='text-align: center;'>Please upload an image for analysis</h2>", unsafe_allow_html=True)
 
 
     # initial image and diagnosis data

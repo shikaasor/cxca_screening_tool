@@ -32,8 +32,10 @@ def get_user_metadata(user_id):
         st.error(f"Error fetching user metadata: {str(e)}")
         return None
 
+
 def login_page():
     st.set_page_config(initial_sidebar_state="collapsed")
+    st.markdown("<h1 style='text-align: center; color: #A5FFFD; border: 2px solid #30B0C2; border-radius: 10px; padding: 10px;'>Cervical Cancer Screening Tool</h1>", unsafe_allow_html=True)
     st.title("Login")
     
     set_background('./bgs/654.jpg')
